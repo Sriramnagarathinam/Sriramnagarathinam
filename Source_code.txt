@@ -1,0 +1,72 @@
+import pandas as pd
+import numpy as np
+from sklearn.metrics.pairwise import cosine_similarity
+from sklearn.preprocessing import MultiLabelBinarizer
+import random
+
+
+# Simulated movie dataset
+movies = [
+    {'movie_id': 1, 'title': 'Interstellar', 'genres': ['Sci-Fi', 'Adventure']},
+    {'movie_id': 2, 'title': 'Inception', 'genres': ['Action', 'Sci-Fi', 'Thriller']},
+    {'movie_id': 3, 'title': 'The Dark Knight', 'genres': ['Action', 'Crime', 'Drama']},
+    {'movie_id': 4, 'title': 'Titanic', 'genres': ['Romance', 'Drama']},
+    {'movie_id': 5, 'title': 'The Matrix', 'genres': ['Sci-Fi', 'Action']},
+    {'movie_id': 6, 'title': 'Forrest Gump', 'genres': ['Drama', 'Romance']},
+    {'movie_id': 7, 'title': 'The Godfather', 'genres': ['Crime', 'Drama']},
+    {'movie_id': 8, 'title': 'Avengers: Endgame', 'genres': ['Action', 'Sci-Fi']},
+    {'movie_id': 9, 'title': 'La La Land', 'genres': ['Romance', 'Drama', 'Music']},
+    {'movie_id': 10, 'title': 'Joker', 'genres': ['Crime', 'Drama', 'Thriller']},
+]
+
+
+# Convert movie list to DataFrame
+movie_df = pd.DataFrame(movies)
+
+
+# Encode genres
+mlb = MultiLabelBinarizer()
+genre_encoded = mlb.fit_transform(movie_df['genres'])
+genre_df = pd.DataFrame(genre_encoded, columns=mlb.classes_)
+movie_features = pd.concat([movie_df[['movie_id', 'title']], genre_df], axis=1)
+
+
+# Simulate users with genre preferences
+users = [
+    {'user_id': 1, 'name': 'Alice', 'preferences': ['Romance', 'Drama']},
+    {'user_id': 2, 'name': 'Bob', 'preferences': ['Action', 'Sci-Fi']},
+    {'user_id': 3, 'name': 'Charlie', 'preferences': ['Crime', 'Thriller']},
+    {'user_id': 4, 'name': 'Diana', 'preferences': ['Adventure', 'Sci-Fi']},
+    {'user_id': 5, 'name': 'Eve', 'preferences': ['Music', 'Romance']},
+]
+
+
+user_df = pd.DataFrame(users)
+
+
+# Encode user preferences
+user_genre_encoded = mlb.transform(user_df['preferences'])
+user_features = pd.DataFrame(user_genre_encoded, columns=mlb.classes_)
+user_profiles = pd.concat([user_df[['user_id', 'name']], user_features], axis=1)
+
+
+# Matchmaking system
+def recommend_movies(user_vector, movie_matrix, top_n=5):
+    user_vector = np.array(user_vector).reshape(1, -1)
+    similarities = cosine_similarity(user_vector, movie_matrix)
+    sim_scores = list(enumerate(similarities[0]))
+    sim_scores = sorted(sim_scores, key=lambda x: x[1], reverse=True)
+    top_movies = [movie_df.iloc[i[0]]['title'] for i in sim_scores[:top_n]]
+    return top_movies
+
+
+# Output recommendations for each user
+print("===== Personalized Movie Recommendations =====\n")
+for idx, user in user_profiles.iterrows():
+    user_vector = user.iloc[2:].values # genre vector
+    recommendations = recommend_movies(user_vector, genre_encoded)
+    print(f"User: {user['name']} (Preferences: {', '.join(users[idx]['preferences'])})")
+    print("Recommended Movies:")
+    for i, title in enumerate(recommendations, 1):
+        print(f" {i}. {title}")
+    print("\n" + "-" * 50 + "\n")
