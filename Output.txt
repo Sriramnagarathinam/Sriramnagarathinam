@@ -1,0 +1,67 @@
+
+
+===== Personalized Movie Recommendations =====
+
+
+User: Alice (Preferences: Romance, Drama)
+Recommended Movies:
+  1. Titanic
+  2. Forrest Gump
+  3. La La Land
+  4. The Godfather
+  5. The Dark Knight
+
+
+--------------------------------------------------
+
+
+User: Bob (Preferences: Action, Sci-Fi)
+Recommended Movies:
+  1. The Matrix
+  2. Avengers: Endgame
+  3. Inception
+  4. Interstellar
+  5. The Dark Knight
+
+
+--------------------------------------------------
+
+
+User: Charlie (Preferences: Crime, Thriller)
+Recommended Movies:
+  1. Joker
+  2. The Godfather
+  3. Inception
+  4. The Dark Knight
+  5. Interstellar
+
+
+--------------------------------------------------
+
+
+User: Diana (Preferences: Adventure, Sci-Fi)
+Recommended Movies:
+  1. Interstellar
+  2. The Matrix
+  3. Avengers: Endgame
+  4. Inception
+  5. The Dark Knight
+
+
+--------------------------------------------------
+
+
+User: Eve (Preferences: Music, Romance)
+Recommended Movies:
+  1. La La Land
+  2. Titanic
+  3. Forrest Gump
+  4. Interstellar
+  5. Inception
+
+
+--------------------------------------------------
+
+
+Colab paid products - Cancel contracts here
+
